@@ -27,9 +27,6 @@ wget --no-check-certificate https://raw.githubusercontent.com/tennfy/shadowsocks
 chmod a+x debian_shadowsocks_tennfy.sh
 bash debian_shadowsocks_tennfy.sh
 
-# Make file /root/gfwlist.txt
-wget --no-check-certificate https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
-
 # Make file /etc/rc.local
 cat > /etc/rc.local << EOF
 #!/bin/sh -e
