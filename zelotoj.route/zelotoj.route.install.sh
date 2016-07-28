@@ -7,6 +7,15 @@ export DNS_IP=127.0.0.1
 export DNS_PORT=5353
 export DNS_IPSET=gfwlist
 
+# Install common tools
+opkg update
+opkg install htop iftop dnsutils iperf
+
+# Install python
+opkg install python-dev
+wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+python get-pip.py
+
 # Make file gfwlist.txt
 wget --no-check-certificate https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
 

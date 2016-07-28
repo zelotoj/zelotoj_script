@@ -3,7 +3,7 @@
 export PWD_DIR=$(pwd)
 export SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
 
-# Install network tools
+# Install common tools
 apt-get update && apt-get upgrade -y
 apt-get install htop iftop dnsutils iperf
 
