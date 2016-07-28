@@ -9,12 +9,10 @@ export DNS_IPSET=gfwlist
 
 # Install common tools
 opkg update
-opkg install htop iftop dnsutils iperf
-
-
+opkg install htop iftop bind-dig iperf ntpdate
 
 # Install python
-opkg install python-dev
+opkg install python
 wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
 python get-pip.py
 

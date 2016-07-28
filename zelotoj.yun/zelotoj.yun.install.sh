@@ -5,7 +5,7 @@ export SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
 
 # Install common tools
 apt-get update && apt-get upgrade -y
-apt-get install htop iftop dnsutils iperf
+apt-get install htop iftop dnsutils iperf ntpdate
 
 # Install python
 apt-get install python-dev
