@@ -1,26 +1,3 @@
-#!/bin/sh
-
-export PWD_DIR=$(pwd)
-export SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
-
-export DNS_IP=127.0.0.1
-export DNS_PORT=5353
-export DNS_IPSET=gfwlist
-
-# Install common tools
-opkg update
-opkg install htop iftop bind-dig iperf ntpdate
-
-# Install python
-opkg install python
-wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
-python get-pip.py
-
-# Make file gfwlist.txt
-wget --no-check-certificate https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt
-
-# Make file gfwlist2dnsmasq.py
-cat > gfwlist2dnsmasq.py <<GFW_EOF
 #!/usr/bin/env python
 #coding=utf-8
 #
@@ -35,9 +12,9 @@ import base64
 import shutil
 import ssl
 
-mydnsip = '$DNS_IP'
-mydnsport = '$DNS_PORT'
-ipsetname = '$DNS_IPSET'
+mydnsip = '127.0.0.1'
+mydnsport = '5353'
+ipsetname = 'gfwlist'
 # Extra Domain;
 EX_DOMAIN=[ \
 '.google.com', \
@@ -121,6 +98,3 @@ print 'moving generated file to dnsmasg directory'
 shutil.move(outfile, rulesfile)
 
 print 'done!'
-GFW_EOF
-
-python gfwlist2dnsmasq.py
