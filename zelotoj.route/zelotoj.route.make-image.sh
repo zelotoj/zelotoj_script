@@ -26,11 +26,11 @@ if [ -d $BUILDER_DIR ]; then
     sed 's/23552k(ubi)/121856k(ubi)/g' target/linux/ar71xx/image/Makefile.bak > target/linux/ar71xx/image/Makefile
 
     # Make file gfwlist.txt
-    cd $BUILDER_DIR/upload-files/root
+    cd $SCRIPTDIR/upload-files/root
     python gfwlist2dnsmasq.py
     if [ -f dnsmasq_list.conf ]; then
-        mkdir -p $BUILDER_DIR/upload-files/etc/dnsmasq.d
-        mv dnsmasq_list.conf $BUILDER_DIR/upload-files/etc/dnsmasq.d/dnsmasq_list.conf
+        mkdir -p $SCRIPTDIR/upload-files/etc/dnsmasq.d
+        mv dnsmasq_list.conf $SCRIPTDIR/upload-files/etc/dnsmasq.d/dnsmasq_list.conf
     fi
 
     # Make WNDR4300 Image
@@ -45,7 +45,7 @@ if [ -d $BUILDER_DIR ]; then
 
     PACKS="${BASE} ${TOOLS} ${APPS} ${GFW} ${SDK}"
     echo "make image PROFILE=WNDR4300 PACKAGES=$PACKS FILES=$SCRIPTDIR/upload-files/"
-    make image PROFILE=WNDR4300 PACKAGES="$PACKS" FILES=$BUILDER_DIR/upload-files/
+    make image PROFILE=WNDR4300 PACKAGES="$PACKS" FILES=$SCRIPTDIR/upload-files/
 fi
 
 cat > bin/ar71xx/tftp-upload <<EOF
