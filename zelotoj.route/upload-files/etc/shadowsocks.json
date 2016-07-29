@@ -1,0 +1,9 @@
+{
+    "server": "23.83.236.66",
+    "server_port": 443,
+    "local_address": "0.0.0.0",
+    "local_port": 1081,
+    "password": "18990097971",
+    "timeout": 60,
+    "method": "rc4-md5"
+}
