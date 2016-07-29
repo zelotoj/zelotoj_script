@@ -25,6 +25,9 @@ if [ -d $BUILDER_DIR ]; then
     fi
     sed 's/23552k(ubi)/121856k(ubi)/g' target/linux/ar71xx/image/Makefile.bak > target/linux/ar71xx/image/Makefile
 
+    # Make file gfwlist.txt
+    wget --no-check-certificate https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt -O $BUILDER_DIR/upload-files/root/gfwlist.txt
+
     # Make WNDR4300 Image
     cd $SCRIPTDIR/$BUILDER_DIR
     BASE="luci luci-theme-bootstrap luci-i18n-base-zh-cn"
@@ -37,7 +40,7 @@ if [ -d $BUILDER_DIR ]; then
 
     PACKS="${BASE} ${TOOLS} ${APPS} ${GFW} ${SDK}"
     echo "make image PROFILE=WNDR4300 PACKAGES=$PACKS FILES=$SCRIPTDIR/upload-files/"
-    make image PROFILE=WNDR4300 PACKAGES="$PACKS" FILES=$SCRIPTDIR/upload-files/
+    make image PROFILE=WNDR4300 PACKAGES="$PACKS" FILES=$BUILDER_DIR/upload-files/
 fi
 
 cat > bin/ar71xx/tftp-upload <<EOF

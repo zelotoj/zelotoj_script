@@ -44,8 +44,5 @@ if [ ! -d /etc/dnsmasq.d ]; then
     mkdir -p /etc/dnsmasq.d
 fi
 
-# Make file gfwlist.txt
-wget --no-check-certificate https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt -O gfwlist.txt
-
 # Make file gfwlist2dnsmasq.py
 python gfwlist2dnsmasq.py
