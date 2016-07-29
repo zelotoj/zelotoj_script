@@ -43,6 +43,3 @@ grep -q 'conf-dir=/etc/dnsmasq.d' /etc/dnsmasq.conf || echo 'conf-dir=/etc/dnsma
 if [ ! -d /etc/dnsmasq.d ]; then
     mkdir -p /etc/dnsmasq.d
 fi
-
-# Make file gfwlist2dnsmasq.py
-python gfwlist2dnsmasq.py
