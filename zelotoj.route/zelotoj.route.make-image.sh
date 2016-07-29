@@ -31,7 +31,7 @@ if [ -d $BUILDER_DIR ]; then
     TOOLS="nano bind-dig"
     APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn"
 
-    GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra"
+    GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra libpolarssl"
     SDK="python python-pip"
     SMB="luci-app-samba luci-app-hd-idle kmod-nls-utf8 kmod-usb-ohci kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci"
 
