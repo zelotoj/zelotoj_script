@@ -1,18 +1,18 @@
-#!/bin/sh
+# Put your custom commands here that should be executed once
+# the system init finished. By default this file does nothing.
 
-export PWD_DIR=$(pwd)
-export SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
+# Install shadowsocks-libev-spec
+if [ -f /root/shadowsocks-libev-spec-polarssl_2.4.8-2_ar71xx.ipk ]; then
+    opkg install /root/shadowsocks-libev-spec-polarssl_2.4.8-2_ar71xx.ipk
+fi
 
-cd $SCRIPTDIR
-
-opkg install shadowsocks-libev-spec-polarssl_2.4.8-2_ar71xx.ipk
-
+# Update /etc/dnsmasq.conf
 grep -q 'conf-dir=/etc/dnsmasq.d' /etc/dnsmasq.conf || echo 'conf-dir=/etc/dnsmasq.d' >> /etc/dnsmasq.conf
-
 if [ ! -d /etc/dnsmasq.d ]; then
     mkdir -p /etc/dnsmasq.d
 fi
 
+# Update /etc/rc.local
 cat > /etc/rc.local <<EOF
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
@@ -21,3 +21,5 @@ cat > /etc/rc.local <<EOF
 
 exit 0
 EOF
+
+exit 0
