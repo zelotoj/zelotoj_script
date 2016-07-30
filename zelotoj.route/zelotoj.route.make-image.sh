@@ -37,7 +37,7 @@ if [ -d $BUILDER_DIR ]; then
     cd $SCRIPTDIR/$BUILDER_DIR
     BASE="luci luci-theme-bootstrap luci-i18n-base-zh-cn"
     TOOLS="openssh-sftp-server nano bind-dig htop iftop iperf"
-    APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn"
+    APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn luci-i18n-privoxy-zh-cn"
 
     GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra iptables-mod-tproxy libpolarssl"
     SDK="python python-pip"
