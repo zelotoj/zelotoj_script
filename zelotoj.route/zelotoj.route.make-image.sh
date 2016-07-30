@@ -32,11 +32,11 @@ if [ -d $BUILDER_DIR ]; then
         mkdir -p $SCRIPTDIR/upload-files/etc/dnsmasq.d
         mv dnsmasq_list.conf $SCRIPTDIR/upload-files/etc/dnsmasq.d/dnsmasq_list.conf
     fi
-
+\
     # Make WNDR4300 Image
     cd $SCRIPTDIR/$BUILDER_DIR
     BASE="luci luci-theme-bootstrap luci-i18n-base-zh-cn"
-    TOOLS="nano bind-dig htop iftop "
+    TOOLS="openssh-sftp-server nano bind-dig htop iftop iperf"
     APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn"
 
     GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra iptables-mod-tproxy libpolarssl"
@@ -49,16 +49,15 @@ if [ -d $BUILDER_DIR ]; then
 fi
 
 cd $SCRIPTDIR/$BUILDER_DIR/bin/ar71xx
-cat > tftp-upload.sh <<EOF
-#!/bin/sh
 
-cat > tftp-upload.cmd <<CMD_EOF
+cat > tftp-upload.cmd <<EOF
 connect 192.168.1.1
 binary
 put openwrt-15.05.1-ar71xx-nand-wndr4300-ubi-factory.img
 quit
-CMD_EOF
-
-tftp tftp-upload.cmd
-rm tftp-upload.cmd
 EOF
+cat > tftp-upload.sh <<EOF
+#!/bin/sh
+tftp tftp-upload.cmd
+EOF
+chmod a+x tftp-upload.sh

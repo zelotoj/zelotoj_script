@@ -22,4 +22,6 @@ cat > /etc/rc.local <<EOF
 exit 0
 EOF
 
+/root/gfwlist_update.sh
+
 exit 0
