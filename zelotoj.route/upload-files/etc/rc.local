@@ -1,9 +1,11 @@
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
 
-# Install shadowsocks-libev-spec
-if [ -f /root/shadowsocks-libev-spec-polarssl_2.4.8-2_ar71xx.ipk ]; then
-    opkg install /root/shadowsocks-libev_2.4.8-2_ar71xx.ipk
+# Install shadowsocks-libev
+SS_IPK_NAME=shadowsocks-libev_2.4.8-2_ar71xx.ipk
+
+if [ -f /root/$SS_IPK_NAME ]; then
+    opkg install /root/$SS_IPK_NAME
 fi
 
 # Update /etc/dnsmasq.conf
