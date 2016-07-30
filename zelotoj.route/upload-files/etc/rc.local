@@ -23,6 +23,7 @@ exit 0
 EOF
 
 /etc/init.d/auto_ss_gfwlist enable
+/etc/init.d/auto_ss_gfwlist restart
 /root/gfwlist_update.sh
 
 exit 0

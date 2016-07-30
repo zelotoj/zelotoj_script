@@ -4,7 +4,6 @@ export PWD_DIR=$(pwd)
 export SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
 
 export BUILDER_DIR=OpenWrt-ImageBuilder-15.05.1-ar71xx-nand.Linux-x86_64
-export IPSET_NAME=gfwlist
 
 # Download OpenWrt-ImageBuilder
 if [ ! -f $BUILDER_DIR.tar.bz2 ]; then
@@ -41,23 +40,25 @@ if [ -d $BUILDER_DIR ]; then
 
     GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra iptables-mod-tproxy libpolarssl"
     SDK="python python-pip"
-    SMB="luci-app-samba luci-app-hd-idle kmod-nls-utf8 kmod-usb-ohci kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci"
+    #SMB="luci-app-samba luci-app-hd-idle kmod-nls-utf8 kmod-usb-ohci kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci"
+    #VPN="strongswan"
 
-    PACKS="${BASE} ${TOOLS} ${APPS} ${GFW} ${SDK}"
-    echo "make image PROFILE=WNDR4300 PACKAGES=$PACKS FILES=$SCRIPTDIR/upload-files/"
+    PACKS="${BASE} ${TOOLS} ${APPS} ${GFW} ${SDK} ${SMB} ${VPN}"
     make image PROFILE=WNDR4300 PACKAGES="$PACKS" FILES=$SCRIPTDIR/upload-files/
+    echo "make image PROFILE=WNDR4300 PACKAGES=$PACKS FILES=$SCRIPTDIR/upload-files/"
 fi
 
 cd $SCRIPTDIR/$BUILDER_DIR/bin/ar71xx
 
-cat > tftp-upload.cmd <<EOF
+cat > tftp-upload.sh <<EOF
+#!/bin/sh
+cat > tftp-upload.cmd <<CMD_EOF
 connect 192.168.1.1
 binary
 put openwrt-15.05.1-ar71xx-nand-wndr4300-ubi-factory.img
 quit
-EOF
-cat > tftp-upload.sh <<EOF
-#!/bin/sh
-tftp tftp-upload.cmd
+CMD_EOF
+
+tftp < tftp-upload.cmd
 EOF
 chmod a+x tftp-upload.sh
