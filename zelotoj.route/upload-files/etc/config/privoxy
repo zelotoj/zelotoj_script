@@ -14,5 +14,6 @@
 	option debug_8192 '1'
 	list forward_socks5 '/ 127.0.0.1:1080 .'
 	list permit_access '192.168.0.0/16'
+	list permit_access '127.0.0.0/31'
 	list listen_address '0.0.0.0:8080'
 
