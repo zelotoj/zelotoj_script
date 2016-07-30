@@ -1,1 +1,1 @@
-0 5 * * * /root/gfwlist2dnsmasq.py && mv /root/dnsmasq_list.conf /etc/dnsmasq.d/dnsmasq_list.conf
+0 5 * * * /root/gfwlist_update.sh

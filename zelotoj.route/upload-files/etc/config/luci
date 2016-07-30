@@ -27,6 +27,6 @@ config internal 'themes'
 	option Bootstrap '/luci-static/bootstrap'
 
 config command
-	option name '安装SS'
-	option command '/root/ss-install.sh'
+	option name '更新GFW列表'
+	option command '/root/gfwlist_update.sh'
 

@@ -36,10 +36,10 @@ if [ -d $BUILDER_DIR ]; then
     # Make WNDR4300 Image
     cd $SCRIPTDIR/$BUILDER_DIR
     BASE="luci luci-theme-bootstrap luci-i18n-base-zh-cn"
-    TOOLS="nano bind-dig"
+    TOOLS="nano bind-dig htop iftop "
     APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn"
 
-    GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra libpolarssl"
+    GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra iptables-mod-tproxy libpolarssl"
     SDK="python python-pip"
     SMB="luci-app-samba luci-app-hd-idle kmod-nls-utf8 kmod-usb-ohci kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci"
 
@@ -48,9 +48,17 @@ if [ -d $BUILDER_DIR ]; then
     make image PROFILE=WNDR4300 PACKAGES="$PACKS" FILES=$SCRIPTDIR/upload-files/
 fi
 
-cat > bin/ar71xx/tftp-upload <<EOF
+cd $SCRIPTDIR/$BUILDER_DIR/bin/ar71xx
+cat > tftp-upload.sh <<EOF
+#!/bin/sh
+
+cat > tftp-upload.cmd <<CMD_EOF
 connect 192.168.1.1
 binary
 put openwrt-15.05.1-ar71xx-nand-wndr4300-ubi-factory.img
 quit
+CMD_EOF
+
+tftp tftp-upload.cmd
+rm tftp-upload.cmd
 EOF

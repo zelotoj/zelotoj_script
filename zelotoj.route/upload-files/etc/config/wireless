@@ -1,0 +1,31 @@
+
+config wifi-device 'radio0'
+	option type 'mac80211'
+	option channel '11'
+	option hwmode '11g'
+	option path 'platform/ar934x_wmac'
+	option htmode 'HT40'
+	option disabled '1'
+
+config wifi-device 'radio1'
+	option type 'mac80211'
+	option hwmode '11a'
+	option path 'pci0000:00/0000:00:00.0'
+	option channel '153'
+	option htmode 'HT40'
+	option txpower '17'
+
+config wifi-iface
+	option device 'radio0'
+	option network 'lan'
+	option mode 'ap'
+	option ssid 'OpenWrt'
+	option encryption 'none'
+
+config wifi-iface
+	option device 'radio1'
+	option network 'lan'
+	option mode 'ap'
+	option ssid 'OpenWrt'
+	option encryption 'none'
+
