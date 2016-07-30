@@ -22,6 +22,7 @@ cat > /etc/rc.local <<EOF
 exit 0
 EOF
 
+/etc/init.d/auto_ss_gfwlist enable
 /root/gfwlist_update.sh
 
 exit 0
