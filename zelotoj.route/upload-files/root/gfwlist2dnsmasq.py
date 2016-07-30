@@ -13,7 +13,7 @@ import shutil
 import ssl
 
 mydnsip = '127.0.0.1'
-mydnsport = '2053'
+mydnsport = '1053'
 ipsetname = 'gfwlist'
 # Extra Domain;
 EX_DOMAIN = [ \

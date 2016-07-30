@@ -3,7 +3,7 @@
 
 # Install shadowsocks-libev-spec
 if [ -f /root/shadowsocks-libev-spec-polarssl_2.4.8-2_ar71xx.ipk ]; then
-    opkg install /root/shadowsocks-libev-spec-polarssl_2.4.8-2_ar71xx.ipk
+    opkg install /root/shadowsocks-libev_2.4.8-2_ar71xx.ipk
 fi
 
 # Update /etc/dnsmasq.conf
@@ -22,6 +22,7 @@ cat > /etc/rc.local <<EOF
 exit 0
 EOF
 
+/etc/init.d/shadowsocks disable
 /etc/init.d/auto_ss_gfwlist enable
 /etc/init.d/auto_ss_gfwlist restart
 /root/gfwlist_update.sh

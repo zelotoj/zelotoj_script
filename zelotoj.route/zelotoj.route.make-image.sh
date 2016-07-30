@@ -31,11 +31,11 @@ if [ -d $BUILDER_DIR ]; then
         mkdir -p $SCRIPTDIR/upload-files/etc/dnsmasq.d
         mv dnsmasq_list.conf $SCRIPTDIR/upload-files/etc/dnsmasq.d/dnsmasq_list.conf
     fi
-\
+
     # Make WNDR4300 Image
     cd $SCRIPTDIR/$BUILDER_DIR
     BASE="luci luci-theme-bootstrap luci-i18n-base-zh-cn"
-    TOOLS="openssh-sftp-server nano bind-dig htop iftop iperf"
+    TOOLS="openssh-sftp-server nano bind-dig htop iftop iperf curl whereis"
     APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn luci-i18n-privoxy-zh-cn"
 
     GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra iptables-mod-tproxy libpolarssl"
