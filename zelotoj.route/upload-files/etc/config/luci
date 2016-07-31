@@ -30,3 +30,7 @@ config command
 	option name '更新GFW列表'
 	option command '/usr/share/gfwlist/gfwlist_update.sh'
 
+config command
+	option name '检查无线网卡'
+	option command '/usr/share/test_5g/test_5g.sh'
+
