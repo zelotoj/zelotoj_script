@@ -27,6 +27,6 @@ EOF
 /etc/init.d/shadowsocks disable
 /etc/init.d/auto_ss_gfwlist enable
 /etc/init.d/auto_ss_gfwlist restart
-/root/gfwlist_update.sh
+/usr/share/gfwlist/gfwlist_update.sh
 
 exit 0

@@ -28,5 +28,5 @@ config internal 'themes'
 
 config command
 	option name '更新GFW列表'
-	option command '/root/gfwlist_update.sh'
+	option command '/usr/share/gfwlist/gfwlist_update.sh'
 

@@ -1,1 +1,1 @@
-0 5 * * * /root/gfwlist_update.sh
+0 5 * * * /usr/share/gfwlist/gfwlist_update.sh

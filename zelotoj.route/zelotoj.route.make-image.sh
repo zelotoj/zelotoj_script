@@ -25,7 +25,7 @@ if [ -d $BUILDER_DIR ]; then
     sed 's/23552k(ubi)/121856k(ubi)/g' target/linux/ar71xx/image/Makefile.bak > target/linux/ar71xx/image/Makefile
 
     # Make file gfwlist.txt
-    cd $SCRIPTDIR/upload-files/root
+    cd $SCRIPTDIR/upload-files/usr/share/gfwlist
     python gfwlist2dnsmasq.py
     if [ -f dnsmasq_list.conf ]; then
         mkdir -p $SCRIPTDIR/upload-files/etc/dnsmasq.d
