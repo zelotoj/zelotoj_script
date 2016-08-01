@@ -25,6 +25,7 @@ restart() {
 start() {
     date >> /tmp/test.log
     echo 'start begin' >> /tmp/test.log
+    /etc/init.d/dnsmasq restart
     ipset flush $IPSET_NAME || ipset -N $IPSET_NAME iphash
     iptables -t nat -A PREROUTING -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
     iptables -t nat -A OUTPUT -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
@@ -48,6 +49,7 @@ stop() {
     iptables -t nat -D PREROUTING -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
     iptables -t nat -D OUTPUT -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
     ipset flush $IPSET_NAME
+    /etc/init.d/dnsmasq restart
     echo 'stop end' >> /tmp/test.log
     return 0
 }
