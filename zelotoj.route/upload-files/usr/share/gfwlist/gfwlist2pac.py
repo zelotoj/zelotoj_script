@@ -6,21 +6,21 @@ import urlparse
 import json
 import logging
 import urllib2
+import ssl
 from argparse import ArgumentParser
-import copy
 
 __all__ = ['main']
 
-
-gfwlist_url = 'https://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt' # ban with gfw, you need proxy to access
+# gfwlist_url = 'https://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt'
+gfwlist_url = 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
 
 
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument('-i', '--input', dest='input',
-                      help='path to gfwlist', metavar='GFWLIST')
+                        help='path to gfwlist', metavar='GFWLIST')
     parser.add_argument('-f', '--file', dest='output', required=True,
-                      help='path to output pac', metavar='PAC')
+                        help='path to output pac', metavar='PAC')
     parser.add_argument('-p', '--proxy', dest='proxy', required=True,
                         help='the proxy parameter in the pac file, for example,\
                         "SOCKS5 127.0.0.1:1080;"', metavar='PROXY')
@@ -90,18 +90,13 @@ def parse_gfwlist(content, user_rule=None):
             add_domain_to_set(domains, line)
     return domains
 
+
 def reduce_domains(domains):
     # reduce 'www.google.com' to 'google.com'
     # remove invalid domains
     tld_content = pkgutil.get_data('gfwlist2pac', 'resources/tld.txt')
     tlds = set(tld_content.splitlines(False))
-    cus_content = pkgutil.get_data('gfwlist2pac', 'resources/custom.txt')
-    cuss = cus_content.splitlines(False)
-    ban_content = pkgutil.get_data('gfwlist2pac', 'resources/ban.txt')
-    bans = set(ban_content.splitlines(False))
     new_domains = set()
-    for cus in cuss:
-        new_domains.add(cus)
     for domain in domains:
         domain_parts = domain.split('.')
         last_root_domain = None
@@ -116,21 +111,8 @@ def reduce_domains(domains):
                 continue
             else:
                 break
-        if last_root_domain is not None \
-            and last_root_domain not in bans \
-            and last_root_domain not in new_domains:
-            same = False
-            for cus in new_domains:
-                if len(cus) < len(last_root_domain):
-                    if cmp(cus[::-1] + '.', last_root_domain[::-1][0:len(cus)+1]) == 0 :
-                        same = True
-                        break
-                elif len(cus) > len(last_root_domain):
-                    if cmp(last_root_domain[::-1] + '.', cus[::-1][0:len(last_root_domain)+1]) == 0 :
-                        new_domains.remove(cus)
-                        break
-            if not same :
-                new_domains.add(last_root_domain)
+        if last_root_domain is not None:
+            new_domains.add(last_root_domain)
     return new_domains
 
 
@@ -149,13 +131,13 @@ def main():
     args = parse_args()
     user_rule = None
     if (args.input):
-        with open(args.input, 'r') as f:
+        with open(args.input, 'rb') as f:
             content = f.read()
     else:
         print 'Downloading gfwlist from %s' % gfwlist_url
+        if hasattr(ssl, '_create_unverified_context'):
+            ssl._create_default_https_context = ssl._create_unverified_context
         content = urllib2.urlopen(gfwlist_url, timeout=10).read()
-        with open('gfwlist.txt', 'w') as f:
-            f.write(content)
     if args.user_rule:
         userrule_parts = urlparse.urlsplit(args.user_rule)
         if not userrule_parts.scheme or not userrule_parts.netloc:
@@ -171,7 +153,7 @@ def main():
     domains = parse_gfwlist(content, user_rule)
     domains = reduce_domains(domains)
     pac_content = generate_pac(domains, args.proxy)
-    with open(args.output, 'w') as f:
+    with open(args.output, 'wb') as f:
         f.write(pac_content)
 
 
