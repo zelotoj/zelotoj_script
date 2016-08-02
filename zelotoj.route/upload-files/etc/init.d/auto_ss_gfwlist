@@ -33,7 +33,6 @@ start() {
     service_start /usr/bin/ss-redir -c /etc/shadowsocks.json -A -u -l $REDIR_PORT -f /var/run/ss-redir.pid
     service_start /usr/bin/ss-tunnel -c /etc/shadowsocks.json -A -u -l $DNS_PORT -L 8.8.8.8:53 -f /var/run/ss-tunnel.pid
 
-    /etc/init.d/dnsmasq restart
     echo 'start end' >> /tmp/test.log
 }
 
@@ -43,13 +42,13 @@ stop() {
     service_stop /usr/bin/ss-local
     service_stop /usr/bin/ss-redir
     service_stop /usr/bin/ss-tunnel
+    iptables -t nat -D PREROUTING -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
+    iptables -t nat -D OUTPUT -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
+    /etc/init.d/dnsmasq restart
+    ipset flush $IPSET_NAME
     killall /usr/bin/ss-local
     killall /usr/bin/ss-redir
     killall /usr/bin/ss-tunnel
-    iptables -t nat -D PREROUTING -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
-    iptables -t nat -D OUTPUT -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
-    ipset flush $IPSET_NAME
-    /etc/init.d/dnsmasq restart
     echo 'stop end' >> /tmp/test.log
     return 0
 }

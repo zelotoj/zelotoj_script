@@ -1,13 +1,6 @@
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
 
-# Install shadowsocks-libev
-SS_IPK_NAME=shadowsocks-libev_2.4.8-2_ar71xx.ipk
-
-if [ -f /root/$SS_IPK_NAME ]; then
-    opkg install /root/$SS_IPK_NAME
-fi
-
 # Update /etc/dnsmasq.conf
 grep -q 'conf-dir=/etc/dnsmasq.d' /etc/dnsmasq.conf || echo 'conf-dir=/etc/dnsmasq.d' >> /etc/dnsmasq.conf
 if [ ! -d /etc/dnsmasq.d ]; then
@@ -31,6 +24,5 @@ fi
 /etc/init.d/shadowsocks disable
 /etc/init.d/auto_ss_gfwlist enable
 /etc/init.d/auto_ss_gfwlist restart
-/usr/share/gfwlist/gfwlist_update.sh
 
 exit 0
