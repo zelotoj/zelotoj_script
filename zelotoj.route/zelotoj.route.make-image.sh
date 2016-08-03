@@ -8,7 +8,7 @@ export PACKAGES_BASE="luci luci-theme-bootstrap luci-i18n-base-zh-cn"
 export PACKAGES_TOOLS="openssh-sftp-server nano bind-dig htop iftop iperf curl whereis wget ca-certificates"
 export PACKAGES_APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn luci-i18n-privoxy-zh-cn"
 export PACKAGES_GFW="-dnsmasq dnsmasq-full ip ipset iptables-mod-nat-extra iptables-mod-tproxy libpolarssl"
-export PACKAGES_SDK="python python-pip"
+export PACKAGES_SDK="python python-pip python-logging"
 #export PACKAGES_SMB="luci-app-samba luci-app-hd-idle kmod-nls-utf8 kmod-usb-ohci kmod-usb-storage kmod-usb-storage-extras kmod-usb-uhci"
 #export PACKAGES_VPN="strongswan"
 
@@ -81,7 +81,7 @@ function make_openwrt_image() {
     cd $SCRIPTDIR/$IMAGE_BUILDER_DIR
 
     # Fix ar71xx-nand-4300
-    if [ -n $(echo $IMAGE_BUILDER_FILE | grep "ar71xx-nand") ]; then
+    if echo $IMAGE_BUILDER_FILE | grep "ar71xx-nand"; then
         local MAKEFILE_FILE=$SCRIPTDIR/$IMAGE_BUILDER_DIR/target/linux/ar71xx/image/Makefile
         local MAKEFILE_BAK=$MAKEFILE_FILE.bak
         echo $MAKEFILE_FILE
@@ -95,8 +95,8 @@ function make_openwrt_image() {
     fi
 
     # Fix ar71xx-nand-4300
-    if [ -n $(echo $IMAGE_BUILDER_FILE | grep "ar71xx-generic") ]; then
-        PACKAGES_SDK="python-light"
+    if echo $IMAGE_BUILDER_FILE | grep "ar71xx-generic"; then
+        PACKAGES_SDK="python-light python-logging python-openssl python-codecs"
     fi
 
     # Add ipk files

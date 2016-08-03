@@ -17,11 +17,8 @@ cat > /etc/rc.local <<EOF
 exit 0
 EOF
 
-if [ -f /etc/dropbear/authorized_keys ]; then
-    chmod 0644 /etc/dropbear/authorized_keys
-fi
-
 /etc/init.d/shadowsocks disable
+/etc/init.d/shadowsocks stop
 /etc/init.d/auto_ss_gfwlist enable
 /etc/init.d/auto_ss_gfwlist restart
 
