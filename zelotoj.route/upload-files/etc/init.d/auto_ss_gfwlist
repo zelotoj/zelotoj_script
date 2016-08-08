@@ -3,11 +3,17 @@ START=97
 STOP=10
 
 export IPSET_NAME=gfwlist
+export SERVICE_NAME="${IPSET_NAME}_service"
 export SOCK5_PORT=1080
 export REDIR_PORT=1081
 export DNS_PORT=1053
 
 boot() {
+    logger -t $SERVICE_NAME "boot..."
+    until iptables-save -t nat | grep -q "^:zone_lan_prerouting"; do
+        sleep 1
+    done
+    start
     return 0
 }
 
@@ -22,33 +28,42 @@ restart() {
     start
 }
 
-start() {
-    date >> /var/log/test.log
-    echo 'start begin' >> /var/log/test.log
-    service_start /usr/bin/ss-local -c /etc/shadowsocks.json -A -u -l $SOCK5_PORT -f /var/run/ss-redir.pid
-    service_start /usr/bin/ss-redir -c /etc/shadowsocks.json -A -u -l $REDIR_PORT -f /var/run/ss-redir.pid
-    service_start /usr/bin/ss-tunnel -c /etc/shadowsocks.json -A -u -l $DNS_PORT -L 8.8.8.8:53 -f /var/run/ss-tunnel.pid
-    ipset flush $IPSET_NAME || ipset -N $IPSET_NAME iphash
+ipset_rule_add() {
+    ipset flush $IPSET_NAME || ipset create $IPSET_NAME hash:ip counters timeout 1200
+    logger -t $SERVICE_NAME "ipset flush $IPSET_NAME"
+    ipset add $IPSET_NAME 8.8.8.8
+    ipset add $IPSET_NAME 8.8.4.4
     iptables -t nat -A PREROUTING -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
     iptables -t nat -A OUTPUT -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
+    logger -t $SERVICE_NAME "add iptable rules"
     /etc/init.d/dnsmasq restart
-
-    echo 'start end' >> /var/log/test.log
 }
 
-stop() {
-    date >> /var/log/test.log
-    echo 'stop begin' >> /var/log/test.log
-    service_stop /usr/bin/ss-local
-    service_stop /usr/bin/ss-redir
-    service_stop /usr/bin/ss-tunnel
+ipset_rule_remove() {
     iptables -t nat -D PREROUTING -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
     iptables -t nat -D OUTPUT -p tcp -m set --match-set $IPSET_NAME dst -j REDIRECT --to-port $REDIR_PORT
     ipset flush $IPSET_NAME
-    /etc/init.d/dnsmasq restart
-    killall /usr/bin/ss-local
-    killall /usr/bin/ss-redir
-    killall /usr/bin/ss-tunnel
-    echo 'stop end' >> /var/log/test.log
+    logger -t $IPSET_NAME "remove iptable rules"
+}
+
+start() {
+    logger -t $SERVICE_NAME "start"
+    service_start /usr/bin/ss-local -c /etc/shadowsocks.json -A -u -l $SOCK5_PORT -f /var/run/ss-redir.pid
+    service_start /usr/bin/ss-redir -c /etc/shadowsocks.json -A -u -l $REDIR_PORT -f /var/run/ss-redir.pid
+    service_start /usr/bin/ss-tunnel -c /etc/shadowsocks.json -A -u -l $DNS_PORT -L 8.8.8.8:53 -f /var/run/ss-tunnel.pid
+    logger -t $SERVICE_NAME "ss start"
+    ipset_rule_add
+    logger -t $SERVICE_NAME "start complete"
+    return 0
+}
+
+stop() {
+    logger -t $SERVICE_NAME "stop"
+    ipset_rule_remove
+    service_stop /usr/bin/ss-local
+    service_stop /usr/bin/ss-redir
+    service_stop /usr/bin/ss-tunnel
+    logger -t $SERVICE_NAME "ss stop"
+    logger -t $SERVICE_NAME "stop complete"
     return 0
 }

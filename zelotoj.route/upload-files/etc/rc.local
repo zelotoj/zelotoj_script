@@ -12,8 +12,6 @@ cat > /etc/rc.local <<EOF
 # Put your custom commands here that should be executed once
 # the system init finished. By default this file does nothing.
 
-/etc/init.d/auto_ss_gfwlist restart
-
 exit 0
 EOF
 
