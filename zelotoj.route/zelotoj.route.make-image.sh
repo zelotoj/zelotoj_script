@@ -3,7 +3,11 @@
 export PWD_DIR=$(pwd)
 export SCRIPTDIR=$(cd "$(dirname "$0")"; pwd)
 
+#export IMAGE_PROFILE=TLWR703
+#export IMAGE_BUILDER_URL=https://downloads.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-ImageBuilder-15.05.1-ar71xx-generic.Linux-x86_64.tar.bz2
+export IMAGE_PROFILE=WNDR4300
 export IMAGE_BUILDER_URL=https://downloads.openwrt.org/chaos_calmer/15.05.1/ar71xx/nand/OpenWrt-ImageBuilder-15.05.1-ar71xx-nand.Linux-x86_64.tar.bz2
+
 export PACKAGES_BASE="luci luci-theme-bootstrap luci-i18n-base-zh-cn"
 export PACKAGES_TOOLS="openssh-sftp-server nano bind-dig htop iftop iperf curl whereis wget ca-certificates"
 export PACKAGES_APPS="luci-i18n-ddns-zh-cn luci-i18n-wol-zh-cn luci-i18n-upnp-zh-cn luci-i18n-qos-zh-cn luci-i18n-commands-zh-cn luci-i18n-privoxy-zh-cn"
@@ -108,9 +112,9 @@ function make_openwrt_image() {
     make info
     PACKAGE_ALL="${PACKAGES_BASE} ${PACKAGES_TOOLS} ${PACKAGES_APPS} ${PACKAGES_GFW} ${PACKAGES_SDK} ${PACKAGES_SMB} ${PACKAGES_VPN} ${PACKAGES_IPK}"
     if [ -d $UPLOAD_DIR ]; then
-        make image PROFILE=WNDR4300 PACKAGES="$PACKAGE_ALL" FILES=$ADD_OTHER_DIR
+        make image PROFILE=$IMAGE_PROFILE PACKAGES="$PACKAGE_ALL" FILES=$ADD_OTHER_DIR
     else
-        make image PROFILE=WNDR4300 PACKAGES="$PACKAGE_ALL"
+        make image PROFILE=$IMAGE_PROFILE PACKAGES="$PACKAGE_ALL"
     fi
 
     echo "*****************************"

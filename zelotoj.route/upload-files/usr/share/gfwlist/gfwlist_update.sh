@@ -11,8 +11,6 @@ if [ -f dnsmasq_list.conf ]; then
         grep -v '=/.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}/' dnsmasq_list.conf > gfwlist.conf
         rm dnsmasq_list.conf
         echo "更新完成"
-        /etc/init.d/dnsmasq restart
-        /etc/init.d/auto_ss_gfwlist restart
     fi
 fi
 echo ""

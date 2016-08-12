@@ -28,7 +28,7 @@ config internal 'themes'
 
 config command
 	option name '更新GFW列表'
-	option command '/usr/share/gfwlist/gfwlist_update.sh'
+	option command '/usr/share/gfwlist/dnsmasq_update.sh'
 
 config command
 	option name '检查无线网卡'
